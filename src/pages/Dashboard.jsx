@@ -111,8 +111,15 @@ const Dashboard = () => {
   })
 
   // Top 3 tareas de alta prioridad pendientes
+  // Solo muestra tareas sin fecha o con dueDate <= hoy — nunca tareas futuras
+  const todayEnd = new Date()
+  todayEnd.setHours(23, 59, 59, 999)
   const topTasks = tasks
-    .filter((t) => t.priority === 'alta' && t.status === 'pending')
+    .filter((t) => {
+      if (t.priority !== 'alta' || t.status !== 'pending') return false
+      if (!t.dueDate) return true
+      return new Date(t.dueDate) <= todayEnd
+    })
     .slice(0, 3)
 
   // Hábitos de hoy
@@ -185,7 +192,7 @@ const Dashboard = () => {
       {/* Vista rápida de tareas de alta prioridad */}
       <div className="animate-fadeUp delay-3">
         <h2 className="font-sans font-semibold text-white mb-3 flex items-center gap-2">
-          <span>🔴</span> Tareas prioritarias de hoy
+          <span>🔴</span> Tareas prioritarias pendientes
         </h2>
         {topTasks.length === 0 ? (
           <div className="bg-surface border border-muted/30 rounded-lg p-4 font-mono text-sm text-muted text-center">

@@ -1,8 +1,10 @@
 import { NavLink } from 'react-router-dom'
+import { useAuth } from '../../context/AuthContext'
 
-// Barra de navegación inferior para mobile — solo íconos, sin labels
-// Se muestra solo en pantallas < 768px (el sidebar se oculta en mobile)
 const BottomNav = ({ inboxCount = 0 }) => {
+  const { user } = useAuth()
+  const isAdmin = user?.role === 'admin'
+
   const navItems = [
     { path: '/dashboard', icon: '🏠' },
     { path: '/tasks', icon: '✅' },
@@ -10,7 +12,9 @@ const BottomNav = ({ inboxCount = 0 }) => {
     { path: '/projects', icon: '🚀' },
     { path: '/inbox', icon: '📥', badge: inboxCount },
     { path: '/routine', icon: '🔁' },
-    { path: '/manual', icon: '📖' },
+    isAdmin
+      ? { path: '/manual', icon: '⚙️' }
+      : { path: '/guia', icon: '📖' },
   ]
 
   return (
@@ -26,7 +30,6 @@ const BottomNav = ({ inboxCount = 0 }) => {
           }
         >
           <span className="text-lg">{item.icon}</span>
-          {/* Badge de bandeja */}
           {item.badge > 0 && (
             <span className="absolute -top-1 -right-1 bg-accent text-black font-bold font-mono text-xs rounded-full w-4 h-4 flex items-center justify-center leading-none">
               {item.badge > 9 ? '9+' : item.badge}
