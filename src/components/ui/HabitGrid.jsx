@@ -35,7 +35,7 @@ const HabitGrid = ({ habits, onToggle, onDelete }) => {
   const dayLabels = ['Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb', 'Dom']
 
   // Verificar si un hábito fue completado en una fecha específica
-  // Usa toLocalDateStr para que el servidor almacene UTC medianoche pero
+  // Usa toLocalDateStr para que el servidor almacene UTC mediodía (T12:00Z) para que en cualquier timezone local caiga en el día correcto
   // el cliente compare contra la fecha local correcta.
   const isCompleted = (habit, dateStr) => {
     return habit.weekData?.some((d) => {
